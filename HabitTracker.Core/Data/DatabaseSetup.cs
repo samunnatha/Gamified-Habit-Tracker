@@ -24,7 +24,40 @@ namespace HabitTracker.Core.Data
                     PasswordHash TEXT NOT NULL,
                     Level INTEGER NOT NULL DEFAULT 1,
                     XP INTEGER NOT NULL DEFAULT 0,
+                    Coins INTEGER NOT NULL DEFAULT 0,
                     AvailableFreezes INTEGER NOT NULL DEFAULT 1
+                );
+            ");
+
+            // Create Achievements Table
+            helper.ExecuteNonQuery(@"
+                CREATE TABLE IF NOT EXISTS Achievements (
+                    AchievementId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Name TEXT NOT NULL,
+                    Description TEXT NOT NULL,
+                    RequiredValue INTEGER NOT NULL,
+                    Type TEXT NOT NULL
+                );
+            ");
+
+            // Seed basic achievements if empty
+            var count = Convert.ToInt32(helper.ExecuteScalar("SELECT COUNT(*) FROM Achievements"));
+            if (count == 0)
+            {
+                helper.ExecuteNonQuery("INSERT INTO Achievements (Name, Description, RequiredValue, Type) VALUES ('First Steps', 'Complete your very first habit', 1, 'TotalCompletions')");
+                helper.ExecuteNonQuery("INSERT INTO Achievements (Name, Description, RequiredValue, Type) VALUES ('Consistency', 'Reach a 7-day streak', 7, 'Streak')");
+                helper.ExecuteNonQuery("INSERT INTO Achievements (Name, Description, RequiredValue, Type) VALUES ('Level Up!', 'Reach Level 5', 5, 'Level')");
+            }
+
+            // Create UserAchievements
+            helper.ExecuteNonQuery(@"
+                CREATE TABLE IF NOT EXISTS UserAchievements (
+                    UserId INTEGER NOT NULL,
+                    AchievementId INTEGER NOT NULL,
+                    DateUnlocked TEXT NOT NULL,
+                    PRIMARY KEY (UserId, AchievementId),
+                    FOREIGN KEY(UserId) REFERENCES Users(UserId) ON DELETE CASCADE,
+                    FOREIGN KEY(AchievementId) REFERENCES Achievements(AchievementId) ON DELETE CASCADE
                 );
             ");
 

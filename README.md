@@ -1,41 +1,59 @@
-# Gamified Habit Tracker (Offline-First)
+# Gamified Habit Tracker (Advanced Edition)
 
-This project contains a complete implementation of a Gamified Habit Tracker using C# (.NET Framework 4.8), Windows Forms, ASP.NET Web Forms, and SQLite (via ADO.NET). 
+This repository contains the complete, gamified offline-first Habit Tracking application built with C# (.NET Framework 4.8), Windows Forms, and SQLite.
 
-The requirements have been fully met, including the user feedback to include a real login in WinForms, streak freezes, missing DB fallback, smart reminders, simple local .json configs, related components, and a local backup mechanism.
+## ✨ New Features from Phase 2
+- **Refactored Architecture**: The application strictly separates UI from Business Logic using `HabitTracker.Core.Services`.
+- **Advanced Gamification**:
+  - **Achievements System**: Tracks Total Completions, Streaks, and Level milestones to unlock achievements.
+  - **Rewards Store**: You earn **Coins (🪙)** passively when completing habits, which can be spent to buy cosmetic themes or Extra Streak Freezes!
+- **WOW Features!**
+  - **Analytics Dashboard (📊)**: A beautiful WinForms Column Chart displaying your habit completion history over the last 7 days.
+  - **AI Habit Suggestions (🤖)**: Automatically scans your existing habits to suggest new routines and practices.
+  - **Smart Reminders Prediction (🔔)**: The timer actively evaluates whether a habit has been skipped before firing predictive alerts.
 
-## Solution Structure
+---
 
-1. **HabitTracker.Core (`net48`)**: A Class Library containing all SQLite Data Access logic, Game Engine logic, and Models.
-2. **HabitTracker.WinForms (`net48`)**: The Windows Forms application.
-3. **HabitTracker.Web**: An ASP.NET Web Site containing the mock login logic and dashboard.
+## 🚀 Extremely Clear Instructions on How to Run This
 
-## How to Run
+Since this application uses `.NET Framework 4.8` SDK-style projects natively supported by modern IDEs, please follow these EXACT steps to avoid any build errors:
 
-### Windows Forms Application
-Since this project uses modern SDK-style `.csproj` files targeted for `.NET 4.8`, you can open it easily:
+### Option 1: The Easiest Way (Using Visual Studio 2019 / 2022)
+1. **Open Visual Studio.**
+2. Click **File -> Open -> Project/Solution**.
+3. Navigate to `c:\--Files--\Programming\Projects\Gamified Habit Tracker\` and select **GamifiedHabitTracker.sln**.
+4. Right-click the **HabitTracker.WinForms** project in the Solution Explorer and select **"Set as Startup Project"**.
+5. Wait ~10 seconds for Visual Studio to automatically resolve the `System.Data.SQLite` NuGet dependencies.
+6. Press **F5** (or click the Green "Start" button) to compile and run the application!
 
-1. Open `GamifiedHabitTracker.sln` in **Visual Studio 2022** (or 2019).
-2. Right-click on **HabitTracker.WinForms** -> **Set as Startup Project**.
-3. **Build Solution** (This will automatically restore `System.Data.SQLite` via NuGet).
-4. **Run (F5)**.
+### Option 2: Using the Developer Command Prompt
+If you prefer the command line:
+1. Open the **Developer Command Prompt for VS 2022**.
+2. Navigate to the project directory:
+   ```cmd
+   cd "C:\--Files--\Programming\Projects\Gamified Habit Tracker"
+   ```
+3. Restore NuGet packages and build the solution:
+   ```cmd
+   msbuild GamifiedHabitTracker.sln /t:Restore;Build
+   ```
+4. Run the executable:
+   ```cmd
+   "HabitTracker.WinForms\bin\Debug\net48\HabitTracker.WinForms.exe"
+   ```
 
-**First-Time Setup Flow:**
-When the WinForms app runs, it will detect if a path has been saved.
-If not, it will prompt you to select a folder where `habit_tracker.db` will be created automatically. The path is saved in `config.json`.
-You can then `Register` a new user via the Login screen and interact with the Gamified Tracker.
+### Option 3: Dotnet CLI Command Prompt
+Because we used modern SDK style `.csproj` files, you can also compile via standard dotnet tools:
+```powershell
+cd "c:\--Files--\Programming\Projects\Gamified Habit Tracker"
+dotnet build
+dotnet run --project HabitTracker.WinForms
+```
 
-### Web Forms Application
-The ASP.NET Web App is independent of the SQLite DB per project instructions. 
-1. In Visual Studio, right-click on the `HabitTracker.Web` folder -> **View in Browser** (or **Set as Startup Project** if configured).
-2. IIS Express will host the app.
-3. Access the `Login.aspx` mock login with credentials: `admin` / `admin`.
+---
 
-## Features Included (Per requirements & feedback)
-- **Local SQLite DB** managed by ADO.NET (`System.Data.SQLite`).
-- **Core Logic**: XP & non-linear Level system, Streaks.
-- **Improved Reminder System**: Checks vs actual habit time and skips if completed today.
-- **"Streak Freeze" Mechanic**: If you miss a day, it consumes 1 freeze to save your streak.
-- **Local DB Configuration**: Handled smoothly using a simple editable `config.json` fallback, with graceful handling if corrupted/deleted.
-- **Relational Integrity**: Habits and Rewards correctly point to Logged-In User.
-- **Visual Feedback & UI**: XP progression popups, color highlighting for completed habits, daily summary popups.
+## 🛠️ First Launch Setup
+When you first run the app, a setup dialog will appear:
+1. Click **Browse** and select any folder (e.g., your Desktop or Documents). This is where the local SQLite `.db` file will be generated and stored natively!
+2. Click **Save & Initialize**. The tables (including new `Achievements`, `UserAchievements`, and `StoreItems`) will be seeded automatically.
+3. Once running, click **Register** in the login form, invent a username/password, and log in to explore the Gamified Dashboard, Store, and Analytics tools!
