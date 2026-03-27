@@ -9,4 +9,8 @@
   <ItemGroup>
     <ProjectReference Include="..\HabitTracker.Core\HabitTracker.Core.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+  </ItemGroup>
 </Project>

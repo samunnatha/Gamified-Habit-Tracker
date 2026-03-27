@@ -63,15 +63,27 @@ namespace HabitTracker.Core.Services
         {
             if (IsCompletedToday(habit.HabitId)) return null;
 
-            // Apply Streak Freeze
+            // Apply Streak Freeze or Penalty
             if (_logRepo.DidMissYesterday(habit.HabitId) && habit.CurrentStreak > 0)
             {
-                if (user.AvailableFreezes > 0) user.AvailableFreezes--;
-                else habit.CurrentStreak = 0;
+                if (user.AvailableFreezes > 0) 
+                {
+                    user.AvailableFreezes--;
+                }
+                else 
+                {
+                    habit.CurrentStreak = 0;
+                    user.XP = Math.Max(0, user.XP - 10); // PENALTY for missing un-frozen habits!
+                }
             }
 
             // Gamification logic
             int xpGained = habit.Difficulty.ToLower() == "hard" ? 30 : (habit.Difficulty.ToLower() == "medium" ? 20 : 10);
+            
+            // Daily Streak Bonus! (Max +20 extra XP)
+            int comboBonus = Math.Min(habit.CurrentStreak * 2, 20);
+            xpGained += comboBonus;
+
             int coinsGained = xpGained / 2; // Earn half as many coins as XP
 
             int oldLevel = user.Level;
